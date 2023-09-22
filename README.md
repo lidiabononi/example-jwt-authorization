@@ -1,0 +1,1 @@
+This project aims to help students with want to learn about authentication and authorization with stack Node JS + Express + Sequelize. A video on YouTube is available in order to help the comprehension : https://www.youtube.com/watch?v=8RUNLQfJXek
