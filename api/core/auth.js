@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 const tkn = require('./jwt')
 const httpStatus = require('http-status')
 const User = require('../user/controller')
@@ -8,7 +6,11 @@ const jwt = require('jsonwebtoken')
 exports.verifyUser = async (req, res, next) => {
     try {
 
-        const token = req.headers['x-access-token'];
+        let token = req.headers['authorization'];
+
+        if (!token) return res.status(httpStatus.UNAUTHORIZED).end("Operação não permitida");
+
+        token = token.split(" ")[1];
 
         jwt.verify(token, process.env.SECRET, (err, decoded) => {
             if (err) return res.status(httpStatus.UNAUTHORIZED).end("Operação não permitida");
@@ -26,8 +28,12 @@ exports.verifyUser = async (req, res, next) => {
 
 exports.verifyUserProfile = async (token, profile) => {
     try {
+        console.log("Token recebido: " + token);
 
         const decoded = await tkn.verifyToken(token);
+
+        console.log("Token decodificado: " + decoded);
+
 
         const user = await User.findByUserId(decoded.userId);
 

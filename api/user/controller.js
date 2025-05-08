@@ -1,7 +1,7 @@
-require('dotenv').config()
 const httpStatus = require('http-status')
 const User = require("./model")
 const Profile = require('../profile/model')
+const Profiles = require('../user-profile/profiles')
 const auth = require('../core/auth')
 const tkn = require('../core/jwt')
 
@@ -23,7 +23,8 @@ exports.create = async (req, res) => {
 
 exports.findAll = async (req, res) => {
     try {
-        await auth.verifyUserProfile(req.headers['x-access-token'], "Administrador");
+        console.log(req.headers);
+        await auth.verifyUserProfile(req.headers['authorization'], Profiles.ADMINISTRADOR);
         let users = await User.findAll();
         res.send(users);
     } catch (err) {
@@ -72,8 +73,6 @@ exports.findUnique = async (req, res) => {
         res.json(user);
     } catch (err) {
         console.log("Erro ao buscar usuário por ID" + err);
-
-
     }
 }
 
@@ -81,7 +80,7 @@ exports.delete = (req, res) => {
 
     console.log(req.params.id);
 
-    res.end();
+    res.end("Usuário deletado com sucesso!");
 }
 
 
@@ -97,11 +96,9 @@ exports.login = async (req, res) => {
 
         }
 
-
     } catch (err) {
-        return res.status(httpStatus.INTERNAL_SERVER_ERROR).end();
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).end("Erro ao realizar login.");
     }
-
 }
 
 exports.logout = async (req, res) => {

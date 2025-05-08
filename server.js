@@ -19,6 +19,6 @@ require('./api/user-profile/routes')(app);
 
 db.sync();
 
-var server = app.listen(3000, () => {
+var server = app.listen(process.env.PORT, () => {
     console.log("Servidor rodando na porta 3000 no host " + server.address.address)
 })
